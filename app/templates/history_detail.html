@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Saved plan · PocketSmart AI{% endblock %}
+{% block content %}
+<p><a href="/history">Back to history</a></p>
+<h1>{{ planner.title if planner else entry.planner }}</h1>
+<p class="lead">{{ entry.budget|inr }} budget · {{ entry.created_at[:10] }}</p>
+<dl class="request">
+  <dt>What you asked for</dt><dd>{{ entry.request.get('requirements', '') }}</dd>
+  {% if entry.request.get('preferences') %}<dt>Preferences</dt><dd>{{ entry.request.get('preferences') }}</dd>{% endif %}
+</dl>
+{% set result = entry.result %}
+{% include "_result.html" %}
+{% endblock %}

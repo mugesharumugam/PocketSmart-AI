@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ planner.title }} · PocketSmart AI{% endblock %}
+{% block content %}
+<h1>{{ planner.title }}</h1>
+<p class="lead">{{ planner.short }}</p>
+
+{% if error %}<p class="alert" role="alert">{{ error }}</p>{% endif %}
+
+<form method="post" action="/planner/{{ key }}" class="form planner-form" {% if planner.allow_image %}enctype="multipart/form-data"{% endif %} data-loading-text="Finding options…">
+  <label>Total budget (₹)<input type="number" name="budget" min="500" step="100" inputmode="numeric" placeholder="50000" value="{{ form.get('budget', '') }}" required></label>
+  <label class="wide">What do you need?
+    <textarea name="requirements" rows="3" maxlength="1500" placeholder="{{ planner.requirements_hint }}" required>{{ form.get('requirements', '') }}</textarea>
+  </label>
+  {% for f in planner.extra %}
+  <label>{{ f.label }}<input name="{{ f.name }}" placeholder="{{ f.placeholder }}" value="{{ form.get(f.name, '') }}"></label>
+  {% endfor %}
+  <label class="wide">Other preferences (optional)
+    <textarea name="preferences" rows="2" maxlength="1000" placeholder="Brands, colours, must-haves, things to avoid">{{ form.get('preferences', '') }}</textarea>
+  </label>
+  {% if planner.allow_image %}
+  <label class="wide">Reference image (optional)
+    <input type="file" name="image" accept="image/jpeg,image/png,image/webp">
+    <span class="muted small-text">A design you like. JPG, PNG or WebP, up to 5 MB.</span>
+  </label>
+  {% endif %}
+  <div class="wide"><button class="btn" type="submit">Get recommendations</button></div>
+</form>
+
+{% if result %}{% include "_result.html" %}{% endif %}
+{% endblock %}

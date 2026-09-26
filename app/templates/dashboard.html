@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · PocketSmart AI{% endblock %}
+{% block content %}
+<h1>Hi, {{ user.username }}</h1>
+<p class="lead">Pick a planner to start a new budget plan.</p>
+
+<ul class="rows">
+  {% for key, p in planners.items() %}
+  <li>
+    <h3><a href="/planner/{{ key }}">{{ p.title }}</a></h3>
+    <p>{{ p.short }}</p>
+  </li>
+  {% endfor %}
+</ul>
+
+<h2>Recent recommendations</h2>
+{% if recent %}
+<ul class="rows">
+  {% for e in recent %}
+  <li>
+    <h3><a href="/history/{{ e.id }}">{{ planners[e.planner].title if e.planner in planners else e.planner }}</a></h3>
+    <p>{{ e.budget|inr }} budget · {{ e.created_at[:10] }}</p>
+  </li>
+  {% endfor %}
+</ul>
+<p><a href="/history">See all history</a></p>
+{% else %}
+<p class="muted">Nothing here yet. Open a planner above to create your first plan.</p>
+{% endif %}
+{% endblock %}

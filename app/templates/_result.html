@@ -1,0 +1,44 @@
+<section class="result" aria-labelledby="result-title">
+  <h2 id="result-title">Your plan</h2>
+  <p class="summary">{{ result.summary }}</p>
+
+  <div class="meter" role="img" aria-label="How the budget is split across the recommended items">
+    {% for item in result["items"] %}<span class="seg seg-{{ loop.index0 % 5 }}" style="width: {{ item.pct }}%" title="{{ item.name }}"></span>{% endfor %}
+    {% if result.remaining_pct > 0 %}<span class="seg seg-left" style="width: {{ result.remaining_pct }}%" title="Left over"></span>{% endif %}
+  </div>
+
+  <div class="table-scroll">
+    <table class="ledger">
+      <thead><tr><th scope="col">Item</th><th scope="col" class="num">Qty</th><th scope="col" class="num">Price</th></tr></thead>
+      <tbody>
+        {% for item in result["items"] %}
+        <tr>
+          <td>
+            <span class="dot seg-{{ loop.index0 % 5 }}" aria-hidden="true"></span><strong>{{ item.name }}</strong>
+            {% if item.category %}<span class="muted"> {{ item.category }}</span>{% endif %}
+            {% if item.why %}<p class="why">{{ item.why }}</p>{% endif %}
+            {% if item.buy_from %}<p class="buy">Look on <a href="https://www.google.com/search?tbm=shop&q={{ (item.name ~ ' ' ~ item.buy_from)|urlencode }}" target="_blank" rel="noopener noreferrer">{{ item.buy_from }}</a></p>{% endif %}
+          </td>
+          <td class="num">{{ item.quantity }}</td>
+          <td class="num">{{ item.estimated_price|inr }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr><th scope="row" colspan="2">Estimated total</th><td class="num">{{ result.total|inr }}</td></tr>
+        <tr><th scope="row" colspan="2">Your budget</th><td class="num">{{ result.budget|inr }}</td></tr>
+        {% if result.remaining >= 0 %}
+        <tr class="left"><th scope="row" colspan="2">Left over</th><td class="num">{{ result.remaining|inr }}</td></tr>
+        {% else %}
+        <tr class="over"><th scope="row" colspan="2">Over budget by</th><td class="num">{{ (0 - result.remaining)|inr }}</td></tr>
+        {% endif %}
+      </tfoot>
+    </table>
+  </div>
+
+  {% if result.tips %}
+  <h3>Ways to save</h3>
+  <ul class="tips">{% for tip in result.tips %}<li>{{ tip }}</li>{% endfor %}</ul>
+  {% endif %}
+  <p class="muted small-text">Prices are AI estimates for India and can differ in stores.</p>
+</section>

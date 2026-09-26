@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div>
+    <h1>Plan the spend before you spend it.</h1>
+    <p class="lead">Tell PocketSmart your budget and what you need. It suggests items that fit, with prices in rupees and where to look for them.</p>
+    <p class="actions">
+      {% if user %}
+        <a class="btn" href="/dashboard">Open dashboard</a>
+      {% else %}
+        <a class="btn" href="/register">Get started</a>
+        <a class="btn ghost" href="/login">Sign in</a>
+      {% endif %}
+    </p>
+  </div>
+  <aside class="sample" aria-label="Example plan">
+    <p class="sample-title">Example: living room, ₹50,000</p>
+    <div class="meter" aria-hidden="true">
+      <span class="seg seg-0" style="width:28%"></span><span class="seg seg-1" style="width:14.4%"></span>
+      <span class="seg seg-2" style="width:37%"></span><span class="seg seg-left" style="width:20.6%"></span>
+    </div>
+    <table class="ledger">
+      <tbody>
+        <tr><td><span class="dot seg-0"></span>Ceiling fans, 4</td><td class="num">₹14,000</td></tr>
+        <tr><td><span class="dot seg-1"></span>Pendant lights, 4</td><td class="num">₹7,200</td></tr>
+        <tr><td><span class="dot seg-2"></span>Dining table, 6-seater</td><td class="num">₹18,500</td></tr>
+      </tbody>
+      <tfoot><tr class="left"><th scope="row">Left over</th><td class="num">₹10,300</td></tr></tfoot>
+    </table>
+  </aside>
+</section>
+
+<section class="planner-list" aria-labelledby="planners-title">
+  <h2 id="planners-title">Three planners</h2>
+  <ul class="rows">
+    {% for key, p in planners.items() %}
+    <li><h3>{{ p.title }}</h3><p>{{ p.short }}</p></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}
